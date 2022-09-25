@@ -1,4 +1,6 @@
-import { productsAPI } from "../constants.mjs";
+// @ts-check
+
+import { fetchProduct } from "../fetchProduct.mjs";
 
 export const homeTestScript = () => {
   console.log("home.mjs has loaded");
@@ -6,6 +8,15 @@ export const homeTestScript = () => {
 
 export const items = document.querySelector("#items");
 
+/**
+ *
+ * @param {string} url
+ * @param {string} itemImgUrl
+ * @param {string} imgAltText
+ * @param {string} itemName
+ * @param {string} itemDescription
+ * @returns Node
+ */
 const createItem = (url, itemImgUrl, imgAltText, itemName, itemDescription) => {
   const a = document.createElement("a");
   a.setAttribute("href", `./product.html?id=${url}`);
@@ -31,18 +42,6 @@ const createItem = (url, itemImgUrl, imgAltText, itemName, itemDescription) => {
   return a;
 };
 
-const fetchProduct = async () => {
-  try {
-    const res = await fetch(productsAPI);
-    if (!res.ok) console.error("something went wrong when loading products");
-    const data = await res.json();
-    console.log("data : ", data);
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export const populatePageWithProducts = async () => {
   const getProductsFromAPI = await fetchProduct();
 
@@ -54,7 +53,7 @@ export const populatePageWithProducts = async () => {
       product.name,
       product.description
     );
-    items.appendChild(productElement);
+    items?.appendChild(productElement);
   });
 };
 
