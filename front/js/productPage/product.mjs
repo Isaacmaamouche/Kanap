@@ -32,7 +32,7 @@ export const generateProductPage = async () => {
   let selectedColor = null;
   const select = document.querySelector("#colors");
   const updateColor = () => (selectedColor = select.value);
-  select?.addEventListener("change", updateColor);
+  select.addEventListener("change", updateColor);
 
   productFromAPI.colors.forEach((color) => {
     const option = document.createElement("option");
@@ -42,13 +42,13 @@ export const generateProductPage = async () => {
   });
 
   let selectedQuantity = 0;
-  const quantity = document.querySelector("#quantity");
-  const updateQuantity = () => (selectedQuantity = quantity.value);
-  quantity?.addEventListener("change", updateQuantity);
+  const quantityInput = document.querySelector("#quantity");
+  const updateQuantity = () => (selectedQuantity = Number(quantityInput.value));
+  quantityInput.addEventListener("change", updateQuantity);
 
   const addToCart = () => {
     if (selectedColor && selectedQuantity > 0) {
-      saveToLocalStorage({ productID, selectedColor, selectedQuantity });
+      saveToLocalStorage(productID, selectedColor, selectedQuantity);
     } else if (!selectedColor) {
       alert("Vous devez choisir une couleur");
     } else if (selectedQuantity == 0) {

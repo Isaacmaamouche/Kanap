@@ -1,23 +1,44 @@
 export const getCartItems = () =>
   JSON.parse(localStorage.getItem("cartItems")) || [];
 
-const getSavedItemIndex = (id, selectedColor) => {
-  return getCartItems().findIndex(
-    (item) => item.productID == id && item.selectedColor == selectedColor
-  );
-};
+const createCartItem = (productID, selectedColor, selectedQuantity) => {
+  const currentCartItem = getCartItems();
 
-const createCartItem = (product) => {
+  const newCartItem = {
+    productID: productID,
+    productVariants: [
+      { selectedColor: selectedColor, selectedQuantity: selectedQuantity },
+    ],
+  };
+
   localStorage.setItem(
     "cartItems",
-    JSON.stringify([...getCartItems(), product])
+    JSON.stringify([...currentCartItem, newCartItem])
   );
 };
 
-const updateCartItem = (quantity, savedItemIndex) => {
-  const cartItems = getCartItems();
-  const savedItem = cartItems[savedItemIndex];
-  const currentQuantity = Number(savedItem.selectedQuantity);
+const updateCartItem = (selectedColor, selectedQuantity, savedItemIndex) => {
+  const currentCartItem = getCartItems();
+
+  const itemVariantIndex = currentCartItem[
+    savedItemIndex
+  ].productVariants.findIndex(
+    (variant) => variant.selectedColor == selectedColor
+  );
+  console.log(itemVariantIndex);
+
+  if (itemVariantIndex == -1) {
+    currentCartItem[savedItemIndex].productVariants.push({
+      selectedColor: selectedColor,
+      selectedQuantity: selectedQuantity,
+    });
+    localStorage.setItem("cartItems", JSON.stringify(currentCartItem));
+    return;
+  }
+
+  const itemVariant =
+    currentCartItem[savedItemIndex].productVariants[itemVariantIndex];
+  const currentQuantity = itemVariant.selectedQuantity;
 
   if (currentQuantity == 100) {
     alert(
@@ -25,7 +46,8 @@ const updateCartItem = (quantity, savedItemIndex) => {
     );
     return;
   }
-  const newQuantity = Number(savedItem.selectedQuantity) + Number(quantity);
+
+  const newQuantity = currentQuantity + selectedQuantity;
 
   if (newQuantity > 100) {
     alert(
@@ -35,19 +57,25 @@ const updateCartItem = (quantity, savedItemIndex) => {
     );
     return;
   }
-  cartItems[savedItemIndex] = {
-    ...savedItem,
-    selectedQuantity: newQuantity,
-  };
-  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  itemVariant.selectedQuantity = newQuantity;
+  localStorage.setItem("cartItems", JSON.stringify(currentCartItem));
 };
 
-export const saveToLocalStorage = (product) => {
-  const { productID, selectedColor, selectedQuantity } = product;
-  const savedItemIndex = getSavedItemIndex(productID, selectedColor);
+const getSavedItemIndex = (id) => {
+  const currentCartItem = getCartItems();
+  return currentCartItem.findIndex((item) => item.productID == id);
+};
+
+export const saveToLocalStorage = (
+  productID,
+  selectedColor,
+  selectedQuantity
+) => {
+  const savedItemIndex = getSavedItemIndex(productID);
   if (savedItemIndex > -1) {
-    updateCartItem(selectedQuantity, savedItemIndex);
+    updateCartItem(selectedColor, selectedQuantity, savedItemIndex);
   } else {
-    createCartItem(product);
+    createCartItem(productID, selectedColor, selectedQuantity);
   }
+  console.log(getCartItems());
 };

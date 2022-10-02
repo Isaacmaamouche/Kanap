@@ -4,13 +4,9 @@ import { getCartItems } from "../utils/localStorage.mjs";
 export const generateCartPage = async () => {
   const cartItems = getCartItems();
 
-  //productID, selectedColor, selectedQuantity
-
   console.log("cartItems : ", cartItems);
 
-  cartItems.forEach(({ productID, selectedColor, selectedQuantity }) => {});
-
-  const createItem = async (productID, selectedColor, selectedQuantity) => {
+  const createItem = async ({ productID, productVariants }) => {
     const { imageUrl, altText, name, price } = await fetchProductFromApi(
       productID
     );
@@ -20,7 +16,8 @@ export const generateCartPage = async () => {
     const article = document.createElement("article");
     article.setAttribute("class", "cart__item");
     article.setAttribute("data-id", productID);
-    article.setAttribute("data-color", selectedColor);
+    // article.setAttribute("data-color", selectedColor);
+    //TODO Le html presente un attribut data-color par article, or je ne ddois afficher qu'une fois un produit et lister les variants
 
     //Create the product image section
     const imgSection = document.createElement("div");
@@ -48,56 +45,58 @@ export const generateCartPage = async () => {
     productName.innerHTML = name;
     descriptionSection.appendChild(productName);
 
-    const productColor = document.createElement("p");
-    productColor.innerHTML = selectedColor;
-    descriptionSection.appendChild(productColor);
+    productVariants.forEach((variant) => {
+      const { selectedColor, selectedQuantity } = variant;
 
-    const productPrice = document.createElement("p");
-    productPrice.innerHTML = `${price}  €`;
-    descriptionSection.appendChild(productPrice);
+      const productColor = document.createElement("p");
+      productColor.innerHTML = selectedColor;
+      descriptionSection.appendChild(productColor);
 
-    //Create the product quantity and options section
-    const settingSection = document.createElement("div");
-    settingSection.setAttribute("class", "cart__item__content__settings");
-    contentSection.appendChild(settingSection);
+      const productPrice = document.createElement("p");
+      productPrice.innerHTML = `${price}  €`;
+      descriptionSection.appendChild(productPrice);
 
-    const quantitySection = document.createElement("div");
-    quantitySection.setAttribute(
-      "class",
-      "cart__item__content__settings__quantity"
-    );
-    settingSection.appendChild(quantitySection);
+      //Create the product quantity and options section
+      const settingSection = document.createElement("div");
+      settingSection.setAttribute("class", "cart__item__content__settings");
+      descriptionSection.appendChild(settingSection);
 
-    const productQuantity = document.createElement("p");
-    productQuantity.innerHTML = `Qté : ${selectedQuantity}`;
-    quantitySection.appendChild(productQuantity);
+      const quantitySection = document.createElement("div");
+      quantitySection.setAttribute(
+        "class",
+        "cart__item__content__settings__quantity"
+      );
+      settingSection.appendChild(quantitySection);
 
-    const quantityInput = document.createElement("input");
-    quantityInput.setAttribute("type", "number");
-    quantityInput.setAttribute("class", "itemQuantity");
-    quantityInput.setAttribute("name", "itemQuantity");
-    quantityInput.setAttribute("min", "1");
-    quantityInput.setAttribute("max", "100");
-    quantityInput.setAttribute("value", selectedQuantity);
-    quantitySection.appendChild(quantityInput);
+      const productQuantity = document.createElement("p");
+      productQuantity.innerHTML = `Qté : ${selectedQuantity}`;
+      quantitySection.appendChild(productQuantity);
 
-    //Create the delete section
-    const deleteSection = document.createElement("div");
-    deleteSection.setAttribute(
-      "class",
-      "cart__item__content__settings__delete"
-    );
-    settingSection.appendChild(deleteSection);
+      const quantityInput = document.createElement("input");
+      quantityInput.setAttribute("type", "number");
+      quantityInput.setAttribute("class", "itemQuantity");
+      quantityInput.setAttribute("name", "itemQuantity");
+      quantityInput.setAttribute("min", "1");
+      quantityInput.setAttribute("max", "100");
+      quantityInput.setAttribute("value", selectedQuantity);
+      quantitySection.appendChild(quantityInput);
 
-    const deleteAction = document.createElement("p");
-    deleteAction.setAttribute("class", "deleteItem");
-    deleteAction.innerHTML = "Supprimer";
-    deleteSection.appendChild(deleteAction);
+      //Create the delete section
+      const deleteSection = document.createElement("div");
+      deleteSection.setAttribute(
+        "class",
+        "cart__item__content__settings__delete"
+      );
+      settingSection.appendChild(deleteSection);
+
+      const deleteAction = document.createElement("p");
+      deleteAction.setAttribute("class", "deleteItem");
+      deleteAction.innerHTML = "Supprimer";
+      deleteSection.appendChild(deleteAction);
+    });
 
     cart__items.append(article);
   };
 
-  cartItems.forEach((item) =>
-    createItem(item.productID, item.selectedColor, item.selectedQuantity)
-  );
+  cartItems.forEach((item) => createItem(item));
 };
