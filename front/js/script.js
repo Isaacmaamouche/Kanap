@@ -1,7 +1,3 @@
-import { homeTestScript } from "./elementSelectors/home.mjs";
+import { generateHomePage } from "./homePage/home.mjs";
 
-const mainScript = () => {
-  homeTestScript();
-};
-
-document.addEventListener("DOMContentLoaded", mainScript);
+document.addEventListener("DOMContentLoaded", generateHomePage);
