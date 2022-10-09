@@ -1,9 +1,31 @@
 import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
-import { getCartItems } from "../utils/localStorage.mjs";
+import { getCartItems, setCartItem } from "../utils/localStorage.mjs";
+
+const setTotals = async () => {
+  const totalQuantity = document.querySelector("#totalQuantity");
+  const totalPrice = document.querySelector("#totalPrice");
+  const cartItems = getCartItems();
+
+  let totalItemQuantity = 0;
+  let totalItemPrice = 0;
+
+  cartItems?.forEach(async (item) => {
+    const { price } = await fetchProductFromApi(item.productID);
+    totalItemQuantity = item.productVariants.reduce(
+      (total, variant) => total + variant.selectedQuantity,
+      totalItemQuantity
+    );
+    totalItemPrice = item.productVariants.reduce(
+      (total, variant) => total + price * variant.selectedQuantity,
+      totalItemPrice
+    );
+    totalQuantity.innerHTML = totalItemQuantity;
+    totalPrice.innerHTML = totalItemPrice;
+  });
+};
 
 export const generateCartPage = async () => {
   const cartItems = getCartItems();
-
   console.log("cartItems : ", cartItems);
 
   const createItem = async ({ productID, productVariants }) => {
@@ -18,6 +40,10 @@ export const generateCartPage = async () => {
     article.setAttribute("data-id", productID);
     // article.setAttribute("data-color", selectedColor);
     //TODO Le html presente un attribut data-color par article, or je ne ddois afficher qu'une fois un produit et lister les variants
+
+    //TODO onChange sur les inputs pour mettre à jour le local storage
+    //TODO onClick pour delete la variant (productID, productVariant)
+    //TODO each must update the totals
 
     //Create the product image section
     const imgSection = document.createElement("div");
@@ -79,6 +105,13 @@ export const generateCartPage = async () => {
       quantityInput.setAttribute("min", "1");
       quantityInput.setAttribute("max", "100");
       quantityInput.setAttribute("value", selectedQuantity);
+      quantityInput.addEventListener("change", (e) => {
+        console.log("input value : ", e.target.value);
+        setCartItem(Number(e.target.value), selectedColor, productID);
+        quantityInput.setAttribute("value", e.target.value);
+        productQuantity.innerHTML = `Qté : ${e.target.value}`;
+        setTotals();
+      });
       quantitySection.appendChild(quantityInput);
 
       //Create the delete section
@@ -99,4 +132,7 @@ export const generateCartPage = async () => {
   };
 
   cartItems.forEach((item) => createItem(item));
+  setTotals();
+
+  const deleteVariant = (productID, selectedVariant) => {};
 };

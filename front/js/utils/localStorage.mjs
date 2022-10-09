@@ -25,7 +25,6 @@ const updateCartItem = (selectedColor, selectedQuantity, savedItemIndex) => {
   ].productVariants.findIndex(
     (variant) => variant.selectedColor == selectedColor
   );
-  console.log(itemVariantIndex);
 
   if (itemVariantIndex == -1) {
     currentCartItem[savedItemIndex].productVariants.push({
@@ -48,6 +47,40 @@ const updateCartItem = (selectedColor, selectedQuantity, savedItemIndex) => {
   }
 
   const newQuantity = currentQuantity + selectedQuantity;
+
+  if (newQuantity > 100) {
+    alert(
+      `Vous ne pouvez ajouter plus de ${
+        100 - currentQuantity
+      } à votre panier - Quantité maximum autorisée : 100 exemplaires`
+    );
+    return;
+  }
+  itemVariant.selectedQuantity = newQuantity;
+  localStorage.setItem("cartItems", JSON.stringify(currentCartItem));
+};
+
+export const setCartItem = (selectedQuantity, selectedColor, productID) => {
+  const currentCartItem = getCartItems();
+  const savedItemIndex = getSavedItemIndex(productID);
+  const itemVariantIndex = currentCartItem[
+    savedItemIndex
+  ].productVariants.findIndex(
+    (variant) => variant.selectedColor == selectedColor
+  );
+
+  const itemVariant =
+    currentCartItem[savedItemIndex].productVariants[itemVariantIndex];
+  const currentQuantity = itemVariant.selectedQuantity;
+
+  if (selectedQuantity == 100) {
+    alert(
+      "Vous ne pouvez ajouter davantage de ce produit à votre panier - Quantité maximum autorisée : 100 exemplaires"
+    );
+    return;
+  }
+
+  const newQuantity = selectedQuantity;
 
   if (newQuantity > 100) {
     alert(
