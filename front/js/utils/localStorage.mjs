@@ -95,14 +95,19 @@ export const setCartItem = (selectedQuantity, selectedColor, productID) => {
 };
 
 export const deleteCartItem = (productID, selectedColor) => {
-  const currentCartItem = getCartItems();
+  const currentCartItems = getCartItems();
   const savedItemIndex = getSavedItemIndex(productID);
-  const newCartItem = currentCartItem[savedItemIndex].productVariants.filter(
+  const newCartItems = currentCartItems[savedItemIndex].productVariants.filter(
     (variant) => variant.selectedColor !== selectedColor
   );
-  localStorage.setItem("cartItems", JSON.stringify(newCartItem));
+  // const newCartItesms = currentCartItems.filter(item)
+  //  [savedItemIndex].productVariants.filter(
+  //   (variant) => variant.selectedColor !== selectedColor
+  // );
+  console.log("newCartItems : ", newCartItems);
+  localStorage.setItem("cartItems", JSON.stringify(newCartItems));
 };
-
+//TODO create one entry by product variant
 const getSavedItemIndex = (id) => {
   const currentCartItem = getCartItems();
   return currentCartItem.findIndex((item) => item.productID == id);

@@ -39,44 +39,41 @@ export const generateCartPage = async () => {
     );
     const cart__items = document.querySelector("#cart__items");
 
-    //Create the article section
-    const article = document.createElement("article");
-    article.setAttribute("class", "cart__item");
-    article.setAttribute("data-id", productID);
-    // article.setAttribute("data-color", selectedColor);
-    //TODO Le html presente un attribut data-color par article, or je ne ddois afficher qu'une fois un produit et lister les variants
-
-    //TODO onClick pour delete la variant (productID, productVariant)
-    //TODO each must update the totals
-
-    //Create the product image section
-    const imgSection = document.createElement("div");
-    imgSection.setAttribute("class", "cart__item__img");
-    article.appendChild(imgSection);
-
-    const img = document.createElement("img");
-    img.setAttribute("src", imageUrl);
-    img.setAttribute("alt", altText);
-    imgSection.appendChild(img);
-
-    const contentSection = document.createElement("div");
-    contentSection.setAttribute("class", "cart__item__content");
-    article.appendChild(contentSection);
-
-    //Create the product description section
-    const descriptionSection = document.createElement("div");
-    descriptionSection.setAttribute(
-      "class",
-      "cart__item__content__description"
-    );
-    contentSection.appendChild(descriptionSection);
-
-    const productName = document.createElement("h2");
-    productName.innerHTML = name;
-    descriptionSection.appendChild(productName);
-
     productVariants.forEach((variant) => {
       const { selectedColor, selectedQuantity } = variant;
+
+      //Create the article section
+      const article = document.createElement("article");
+      article.setAttribute("class", "cart__item");
+      article.setAttribute("data-id", productID);
+      article.setAttribute("data-color", selectedColor);
+      //TODO attribut data-color par article + element.closest
+
+      //Create the product image section
+      const imgSection = document.createElement("div");
+      imgSection.setAttribute("class", "cart__item__img");
+      article.appendChild(imgSection);
+
+      const img = document.createElement("img");
+      img.setAttribute("src", imageUrl);
+      img.setAttribute("alt", altText);
+      imgSection.appendChild(img);
+
+      const contentSection = document.createElement("div");
+      contentSection.setAttribute("class", "cart__item__content");
+      article.appendChild(contentSection);
+
+      //Create the product description section
+      const descriptionSection = document.createElement("div");
+      descriptionSection.setAttribute(
+        "class",
+        "cart__item__content__description"
+      );
+      contentSection.appendChild(descriptionSection);
+
+      const productName = document.createElement("h2");
+      productName.innerHTML = name;
+      descriptionSection.appendChild(productName);
 
       const productColor = document.createElement("p");
       productColor.innerHTML = selectedColor;
@@ -143,13 +140,10 @@ export const generateCartPage = async () => {
         setTotals();
         article.parentElement.removeChild(article);
       });
+      cart__items.append(article);
     });
-
-    cart__items.append(article);
   };
 
   cartItems.forEach((item) => createItem(item));
   setTotals();
-
-  const deleteVariant = (productID, selectedVariant) => {};
 };

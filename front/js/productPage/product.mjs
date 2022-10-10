@@ -41,8 +41,8 @@ export const generateProductPage = async () => {
     select.appendChild(option);
   });
 
-  let selectedQuantity = 0;
   const quantityInput = document.querySelector("#quantity");
+  let selectedQuantity = Number(quantityInput.value);
   const updateQuantity = () => (selectedQuantity = Number(quantityInput.value));
   quantityInput.addEventListener("change", updateQuantity);
 
