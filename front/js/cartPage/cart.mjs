@@ -1,5 +1,9 @@
 import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
-import { getCartItems, setCartItem } from "../utils/localStorage.mjs";
+import {
+  deleteCartItem,
+  getCartItems,
+  setCartItem,
+} from "../utils/localStorage.mjs";
 
 const setTotals = async () => {
   const totalQuantity = document.querySelector("#totalQuantity");
@@ -11,6 +15,7 @@ const setTotals = async () => {
 
   cartItems?.forEach(async (item) => {
     const { price } = await fetchProductFromApi(item.productID);
+
     totalItemQuantity = item.productVariants.reduce(
       (total, variant) => total + variant.selectedQuantity,
       totalItemQuantity
@@ -41,7 +46,6 @@ export const generateCartPage = async () => {
     // article.setAttribute("data-color", selectedColor);
     //TODO Le html presente un attribut data-color par article, or je ne ddois afficher qu'une fois un produit et lister les variants
 
-    //TODO onChange sur les inputs pour mettre à jour le local storage
     //TODO onClick pour delete la variant (productID, productVariant)
     //TODO each must update the totals
 
@@ -106,7 +110,15 @@ export const generateCartPage = async () => {
       quantityInput.setAttribute("max", "100");
       quantityInput.setAttribute("value", selectedQuantity);
       quantityInput.addEventListener("change", (e) => {
-        console.log("input value : ", e.target.value);
+        const prevValue = selectedQuantity;
+        if (e.target.value > 100) {
+          quantityInput.setAttribute("value", prevValue);
+          //FIXME Reset input value doesn't work
+          alert(
+            "Vous ne pouvez pas commander plus de 100 articles pour ce produit"
+          );
+          return;
+        }
         setCartItem(Number(e.target.value), selectedColor, productID);
         quantityInput.setAttribute("value", e.target.value);
         productQuantity.innerHTML = `Qté : ${e.target.value}`;
@@ -126,6 +138,11 @@ export const generateCartPage = async () => {
       deleteAction.setAttribute("class", "deleteItem");
       deleteAction.innerHTML = "Supprimer";
       deleteSection.appendChild(deleteAction);
+      deleteSection.addEventListener("click", (e) => {
+        deleteCartItem(productID, selectedColor);
+        setTotals();
+        article.parentElement.removeChild(article);
+      });
     });
 
     cart__items.append(article);

@@ -73,7 +73,7 @@ export const setCartItem = (selectedQuantity, selectedColor, productID) => {
     currentCartItem[savedItemIndex].productVariants[itemVariantIndex];
   const currentQuantity = itemVariant.selectedQuantity;
 
-  if (selectedQuantity == 100) {
+  if (selectedQuantity > 100) {
     alert(
       "Vous ne pouvez ajouter davantage de ce produit à votre panier - Quantité maximum autorisée : 100 exemplaires"
     );
@@ -92,6 +92,15 @@ export const setCartItem = (selectedQuantity, selectedColor, productID) => {
   }
   itemVariant.selectedQuantity = newQuantity;
   localStorage.setItem("cartItems", JSON.stringify(currentCartItem));
+};
+
+export const deleteCartItem = (productID, selectedColor) => {
+  const currentCartItem = getCartItems();
+  const savedItemIndex = getSavedItemIndex(productID);
+  const newCartItem = currentCartItem[savedItemIndex].productVariants.filter(
+    (variant) => variant.selectedColor !== selectedColor
+  );
+  localStorage.setItem("cartItems", JSON.stringify(newCartItem));
 };
 
 const getSavedItemIndex = (id) => {
