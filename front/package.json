@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest ./tests"
+    "test": "jest --watch"
   },
   "author": "Isaac Maamouche",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
+    "babel-jest": "^29.1.2",
     "jest-cli": "^29.1.2",
     "jest-junit": "^14.0.1"
-  }
-}
+  },
+  "dependencies": {
+    "node-fetch": "^3.2.10"
+  }}

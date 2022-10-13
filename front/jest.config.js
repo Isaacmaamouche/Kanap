@@ -3,4 +3,9 @@ const config = {
   verbose: true,
 };
 
-module.exports = config;
+module.exports = {
+  ...config,
+  transform: {
+    "^.+\\.mjs$": "babel-jest",
+  },
+};

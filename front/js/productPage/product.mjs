@@ -1,61 +1,44 @@
 import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
 import { saveToLocalStorage } from "../utils/localStorage.mjs";
+import { addToCart } from "./addToCart.mjs";
+import {
+  itemImgElement,
+  titleElement,
+  priceElement,
+  descriptionElement,
+  selectElement,
+  quantityInputElement,
+  addButtonElement,
+} from "./productPageSelectors.mjs";
 
 export const generateProductPage = async () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+  const currentUrl = window.location.search;
+  const urlParams = new URLSearchParams(currentUrl);
   const productID = urlParams.get("id");
+  const { name, imageUrl, altTxt, price, description, colors } =
+    await fetchProductFromApi(productID);
 
-  const productFromAPI = await fetchProductFromApi(productID);
-  // Automatically wait for the promise to be resolve before continuing
-  // https://www.javascripttutorial.net/javascript-top-level-await/
-  // "When a module imports a top-level await module,
-  // it waits for the top-level await module to complete before evaluating its body"
+  document.title = name;
 
-  document.title = productFromAPI.name;
-
-  const itemImg = document.querySelector(".item__img");
   const img = document.createElement("img");
-  img.setAttribute("src", productFromAPI.imageUrl);
-  img.setAttribute("alt", productFromAPI.altTxt);
-  itemImg.appendChild(img);
+  img.setAttribute("src", imageUrl);
+  img.setAttribute("alt", altTxt);
+  itemImgElement.appendChild(img);
 
-  const title = document.querySelector("#title");
-  title.innerHTML = productFromAPI.name;
+  titleElement.innerHTML = name;
 
-  const price = document.querySelector("#price");
-  price.innerHTML = productFromAPI.price;
+  priceElement.innerHTML = price;
 
-  const description = document.querySelector("#description");
-  description.innerHTML = productFromAPI.description;
+  descriptionElement.innerHTML = description;
 
-  let selectedColor = null;
-  const select = document.querySelector("#colors");
-  const updateColor = () => (selectedColor = select.value);
-  select.addEventListener("change", updateColor);
-
-  productFromAPI.colors.forEach((color) => {
+  colors.forEach((color) => {
     const option = document.createElement("option");
     option.setAttribute("value", color);
     option.innerHTML = color;
-    select.appendChild(option);
+    selectElement.appendChild(option);
   });
 
-  const quantityInput = document.querySelector("#quantity");
-  let selectedQuantity = Number(quantityInput.value);
-  const updateQuantity = () => (selectedQuantity = Number(quantityInput.value));
-  quantityInput.addEventListener("change", updateQuantity);
-
-  const addToCart = () => {
-    if (selectedColor && selectedQuantity > 0) {
-      saveToLocalStorage(productID, selectedColor, selectedQuantity);
-    } else if (!selectedColor) {
-      alert("Vous devez choisir une couleur");
-    } else if (selectedQuantity == 0) {
-      alert("Vous devez choisir une quantité");
-    }
-  };
-
-  const addButton = document.querySelector("#addToCart");
-  addButton?.addEventListener("click", addToCart);
+  addButtonElement?.addEventListener("click", () =>
+    addToCart(select.value, Number(quantityInputElement.value))
+  );
 };
