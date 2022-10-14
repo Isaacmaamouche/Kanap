@@ -1,6 +1,6 @@
 import { saveToLocalStorage } from "../utils/localStorage.mjs";
 
-export const addToCart = (selectedColor, selectedQuantity) => {
+export const addToCart = (productID, selectedColor, selectedQuantity) => {
   if (selectedColor && selectedQuantity > 0) {
     saveToLocalStorage(productID, selectedColor, selectedQuantity);
   } else if (!selectedColor) {

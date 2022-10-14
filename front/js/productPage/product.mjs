@@ -39,6 +39,10 @@ export const generateProductPage = async () => {
   });
 
   addButtonElement?.addEventListener("click", () =>
-    addToCart(select.value, Number(quantityInputElement.value))
+    addToCart(
+      productID,
+      selectElement.value,
+      Number(quantityInputElement.value)
+    )
   );
 };

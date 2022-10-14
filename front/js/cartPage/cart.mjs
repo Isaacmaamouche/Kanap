@@ -9,7 +9,6 @@ const setTotals = async () => {
   const totalQuantity = document.querySelector("#totalQuantity");
   const totalPrice = document.querySelector("#totalPrice");
   const cartItems = getCartItems();
-  console.debug("cartItems : ", cartItems);
 
   let totalItemQuantity = 0;
   let totalItemPrice = 0;
