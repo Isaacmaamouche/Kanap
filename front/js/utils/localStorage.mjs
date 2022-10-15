@@ -45,7 +45,12 @@ export const deleteCartItem = (productID, selectedColor) => {
   const cartItems = getCartItems();
   const indexOfTtemToDelete = getSavedItemIndex(productID, selectedColor);
 
-  localStorage.setItem("cartItems", JSON.stringify(cartItems.filter()));
+  localStorage.setItem(
+    "cartItems",
+    JSON.stringify(
+      cartItems.filter((item, index) => index !== indexOfTtemToDelete)
+    )
+  );
 };
 
 export const setCartItem = (productID, selectedColor, selectedQuantity) => {
@@ -87,3 +92,5 @@ export const saveToLocalStorage = (
   }
   console.log(getCartItems());
 };
+
+export const cleanLocalStorage = () => localStorage.clear();

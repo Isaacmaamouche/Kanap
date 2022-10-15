@@ -1,9 +1,9 @@
 import { generateCartPage } from "./cartPage/cart.mjs";
-import { formValidation } from "./cartPage/confirm.mjs";
+import { addFormValidators } from "./cartPage/confirm.mjs";
 
 const cartPageHandlers = () => {
   generateCartPage();
-  formValidation();
+  addFormValidators();
 };
 
 document.addEventListener("DOMContentLoaded", cartPageHandlers);

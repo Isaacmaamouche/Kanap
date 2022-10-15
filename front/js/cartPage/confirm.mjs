@@ -1,6 +1,7 @@
 //https://www.makeuseof.com/regular-expressions-form-validation-html-javascript/
 //https://code.tutsplus.com/tutorials/form-input-validation-using-only-html5-and-regex--cms-33095
 
+import { getCartItems } from "../utils/localStorage.mjs";
 import {
   firstNameInput,
   lastNameInput,
@@ -14,6 +15,7 @@ import {
   cityErrorMsg,
   emailErrorMsg,
 } from "./cartPageSelectors.mjs";
+import { createOrder } from "./createOrder.mjs";
 
 import {
   addEmailValidator,
@@ -22,7 +24,7 @@ import {
   inputIsValid,
 } from "./inputValidators.mjs";
 
-export const formValidation = () => {
+export const addFormValidators = () => {
   addEmailValidator(emailInput, emailErrorMsg);
   addValidator(firstNameInput, firstNameErrorMsg);
   addValidator(lastNameInput, lastNameErrorMsg);
@@ -30,18 +32,34 @@ export const formValidation = () => {
   addValidator(cityInput, cityErrorMsg);
 };
 
-const postOrder = (e) => {
-  const allFieldsAreValid =
-    emailIsValid(emailInput.value.trim()) &&
-    inputIsValid(firstNameInput.value.trim()) &&
-    inputIsValid(lastNameInput.value.trim()) &&
-    inputIsValid(addressInput.value.trim()) &&
-    inputIsValid(cityInput.value.trim());
-  if (allFieldsAreValid) {
-    //TODO post order
-  } else {
-    e.preventDefault();
-  }
+const allFieldsAreValid = ({ email, firstName, lastName, address, city }) => {
+  return (
+    emailIsValid(email) &&
+    inputIsValid(firstName) &&
+    inputIsValid(lastName) &&
+    inputIsValid(address) &&
+    inputIsValid(city)
+  );
+};
+
+const postOrder = async (e) => {
+  e.preventDefault();
+  const products = getCartItems().map((item) => item.productID);
+  if (products.length == 0) return alert("Votre panier est vide !");
+
+  const contact = {
+    firstName: firstNameInput.value.trim(),
+    lastName: lastNameInput.value.trim(),
+    address: addressInput.value.trim(),
+    city: cityInput.value.trim(),
+    email: emailInput.value.trim(),
+  };
+
+  const areFieldsAreValid = allFieldsAreValid(contact);
+  if (!areFieldsAreValid)
+    alert("Merci de correctement renseigner tous les champs du formulaire.");
+
+  createOrder(contact, products);
 };
 
 orderButton.addEventListener("click", postOrder);

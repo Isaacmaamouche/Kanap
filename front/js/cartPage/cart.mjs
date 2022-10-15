@@ -10,17 +10,20 @@ const setTotals = async () => {
   const totalPrice = document.querySelector("#totalPrice");
   const cartItems = getCartItems();
 
-  let totalItemQuantity = 0;
-  let totalItemPrice = 0;
+  const totalItemQuantity = cartItems.reduce(
+    (total, item) => total + Number(item.selectedQuantity),
+    0
+  );
 
-  cartItems?.forEach(async (item) => {
+  const totalItemPrice = await cartItems.reduce(async (total, item) => {
     const { price } = await fetchProductFromApi(item.productID);
+    const prevTotal = await total;
+    const itemPrice = price * Number(item.selectedQuantity);
+    return prevTotal + itemPrice;
+  }, 0);
 
-    totalItemQuantity = totalItemQuantity + item.selectedQuantity;
-    totalItemPrice = totalItemPrice + price * item.selectedQuantity;
-    totalQuantity.innerHTML = totalItemQuantity;
-    totalPrice.innerHTML = totalItemPrice;
-  });
+  totalQuantity.innerHTML = totalItemQuantity;
+  totalPrice.innerHTML = totalItemPrice;
 };
 
 export const generateCartPage = async () => {
@@ -110,7 +113,7 @@ export const generateCartPage = async () => {
         );
       }
 
-      setCartItem(productID, selectedColor, Number(e.target.value));
+      setCartItem(productID, selectedColor, e.target.value);
       quantityInput.setAttribute("value", e.target.value);
       productQuantity.innerHTML = `Qté : ${e.target.value}`;
       setTotals();

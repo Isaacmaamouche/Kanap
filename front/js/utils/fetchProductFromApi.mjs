@@ -22,7 +22,7 @@ export const OLDfetchProduct = async (productID = "") => {
   }
 };
 
-export const fetchProductFromApi = (productID = "") => {
+export const fetchProductFromApi = async (productID = "") => {
   return fetch(`${productsAPIURL}${productID}`)
     .then((res) => {
       if (!res.ok)
