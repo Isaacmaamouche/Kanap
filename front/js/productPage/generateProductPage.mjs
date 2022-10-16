@@ -1,5 +1,4 @@
 import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
-import { saveToLocalStorage } from "../utils/localStorage.mjs";
 import { addToCart } from "./addToCart.mjs";
 import {
   itemImgElement,

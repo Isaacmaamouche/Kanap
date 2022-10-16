@@ -1,3 +1,3 @@
-import { generateProductPage } from "./productPage/product.mjs";
+import { generateProductPage } from "./productPage/generateProductPage.mjs";
 
 document.addEventListener("DOMContentLoaded", generateProductPage);

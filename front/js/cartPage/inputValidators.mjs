@@ -1,3 +1,11 @@
+import {
+  addressInput,
+  cityInput,
+  emailInput,
+  firstNameInput,
+  lastNameInput,
+} from "./cartPageSelectors.mjs";
+
 export const emailIsValid = (inputValue) => {
   const emailPattern =
     /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]*/;
@@ -33,4 +41,28 @@ export const addEmailValidator = (emailElement, errorMsgElement) => {
         "Veuillez renseigner une adresse email valide.";
     }
   });
+};
+
+export const allInputsAreValid = ({
+  email,
+  firstName,
+  lastName,
+  address,
+  city,
+}) => {
+  return (
+    emailIsValid(email) &&
+    inputIsValid(firstName) &&
+    inputIsValid(lastName) &&
+    inputIsValid(address) &&
+    inputIsValid(city)
+  );
+};
+
+export const addFormValidators = () => {
+  addEmailValidator(emailInput, emailErrorMsg);
+  addValidator(firstNameInput, firstNameErrorMsg);
+  addValidator(lastNameInput, lastNameErrorMsg);
+  addValidator(addressInput, addressErrorMsg);
+  addValidator(cityInput, cityErrorMsg);
 };
