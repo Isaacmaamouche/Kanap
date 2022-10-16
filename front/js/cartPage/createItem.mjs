@@ -3,12 +3,17 @@ import { deleteCartItem, setCartItem } from "../utils/localStorage.mjs";
 import { cart__items } from "./cartPageSelectors.mjs";
 import { setTotals } from "./setTotals.mjs";
 import { verifyQuantity } from "./verifyQuantity.mjs";
-
-export const createItem = async ({
+/**
+ *
+ * @param {string} productID
+ * @param {string} selectedColor
+ * @param {number} selectedQuantity
+ */
+export const createItem = async (
   productID,
   selectedColor,
-  selectedQuantity,
-}) => {
+  selectedQuantity
+) => {
   const { imageUrl, altText, name, price } = await fetchProductFromApi(
     productID
   );

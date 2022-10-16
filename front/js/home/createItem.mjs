@@ -1,5 +1,5 @@
 /**
- *
+ * Creates all the html element for a given item and appends it to the cart
  * @param {string} url
  * @param {string} itemImgUrl
  * @param {string} imgAltText

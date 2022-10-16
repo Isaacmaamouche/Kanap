@@ -6,12 +6,22 @@ import {
   lastNameInput,
 } from "./cartPageSelectors.mjs";
 
+/**
+ * Checks if the email respect the standard email format
+ * @param {string} inputValue
+ * @returns {boolean}
+ */
 export const emailIsValid = (inputValue) => {
   const emailPattern =
     /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]*/;
   return emailPattern.test(inputValue);
 };
 
+/**
+ * Checks if the input does not contain special character, except separators
+ * @param {string} inputValue
+ * @returns {boolean}
+ */
 export const inputIsValid = (inputValue) => {
   //Pas de caractères spéciaux, séparateurs acceptés
   const pattern =
@@ -19,6 +29,13 @@ export const inputIsValid = (inputValue) => {
   return pattern.test(inputValue);
 };
 
+/**
+ * Adds a function that checks for input validity when the user unfocus the input
+ * Adds an error message if the input value is not valid
+ * Removes the error message if the input value is valid
+ * @param {Element} inputElement
+ * @param {Element} errorMsgElement
+ */
 export const addValidator = (inputElement, errorMsgElement) => {
   inputElement.addEventListener("blur", () => {
     if (inputElement.value.trim().length == 0) return;
@@ -31,6 +48,13 @@ export const addValidator = (inputElement, errorMsgElement) => {
   });
 };
 
+/**
+ * Adds a function that checks for email validity when the user unfocus the email input
+ * Adds an error message if the email is not valid
+ * Removes the error message if the email is valid
+ * @param {Element} inputElement
+ * @param {Element} errorMsgElement
+ */
 export const addEmailValidator = (emailElement, errorMsgElement) => {
   emailElement.addEventListener("blur", () => {
     if (emailElement.value.trim().length == 0) return;
@@ -43,6 +67,16 @@ export const addEmailValidator = (emailElement, errorMsgElement) => {
   });
 };
 
+/**
+ * @typedef {object} Contact contains all the form's inputs
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} address
+ * @property {string} city
+ * @property {string} email
+ * @returns {boolean}
+ *
+ */
 export const allInputsAreValid = ({
   email,
   firstName,
@@ -59,6 +93,9 @@ export const allInputsAreValid = ({
   );
 };
 
+/**
+ * Adds validators to all the form inputs
+ */
 export const addFormValidators = () => {
   addEmailValidator(emailInput, emailErrorMsg);
   addValidator(firstNameInput, firstNameErrorMsg);

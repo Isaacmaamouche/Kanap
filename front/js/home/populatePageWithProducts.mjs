@@ -1,7 +1,11 @@
 import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
 import { createItem } from "./createItem.mjs";
+import { itemsSection } from "./homePageSelectors.mjs";
 
-export const populatePageWithProducts = async (parentElement) => {
+/**
+ * Retrives all products info from the API and populate the home page with html elements
+ */
+export const populatePageWithProducts = async () => {
   const getProductsFromAPI = await fetchProductFromApi();
 
   getProductsFromAPI.forEach((product) => {
@@ -12,6 +16,6 @@ export const populatePageWithProducts = async (parentElement) => {
       product.name,
       product.description
     );
-    parentElement.appendChild(productElement);
+    itemsSection.appendChild(productElement);
   });
 };

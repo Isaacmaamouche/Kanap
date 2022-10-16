@@ -1,9 +1,3 @@
-import { orderIdElement } from "./confirmPage/confirmPageSelectors.mjs";
-import { getOrderId } from "./confirmPage/getOrderId.mjs";
+import { displayOrderId } from "./confirmPage/displayOrderId.mjs";
 
-const populateConfirmPage = () => {
-  const orderId = getOrderId();
-  orderIdElement.innerHTML = orderId;
-};
-
-document.addEventListener("DOMContentLoaded", populateConfirmPage);
+document.addEventListener("DOMContentLoaded", displayOrderId);

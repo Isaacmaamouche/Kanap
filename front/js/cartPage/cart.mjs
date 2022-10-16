@@ -7,7 +7,9 @@ import { setTotals } from "./setTotals.mjs";
 
 export const generateCartPage = async () => {
   const cartItems = getCartItems();
-  cartItems.forEach((item) => createItem(item));
+  cartItems.forEach(({ productID, selectedColor, selectedQuantity }) =>
+    createItem(productID, selectedColor, selectedQuantity)
+  );
   setTotals();
   addFormValidators();
   orderButton.addEventListener("click", orderButtonHandler);
