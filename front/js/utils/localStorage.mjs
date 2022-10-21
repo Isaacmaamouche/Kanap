@@ -1,6 +1,7 @@
 export const getCartItems = () =>
   JSON.parse(localStorage.getItem("cartItems")) || [];
 
+// Create a product in local storage with its options
 const createCartItem = (productID, selectedColor, selectedQuantity) => {
   const currentCartItem = getCartItems();
 
@@ -16,11 +17,12 @@ const createCartItem = (productID, selectedColor, selectedQuantity) => {
   );
 };
 
+// Updates a given product with its new quantity
 const updateCartItem = (selectedQuantity, savedItemIndex) => {
   const cartItems = getCartItems();
   const itemToUpdate = cartItems[savedItemIndex];
 
-  const currentQuantity = itemToUpdate.selectedQuantity;
+  const currentQuantity = Number(itemToUpdate.selectedQuantity);
   if (currentQuantity == 100) {
     alert(
       "Vous ne pouvez ajouter davantage de ce produit à votre panier - Quantité maximum autorisée : 100 exemplaires"
@@ -28,7 +30,7 @@ const updateCartItem = (selectedQuantity, savedItemIndex) => {
     return;
   }
 
-  const newQuantity = currentQuantity + selectedQuantity;
+  const newQuantity = currentQuantity + Number(selectedQuantity);
   if (newQuantity > 100) {
     alert(
       `Vous ne pouvez ajouter plus de ${
@@ -38,9 +40,11 @@ const updateCartItem = (selectedQuantity, savedItemIndex) => {
     return;
   }
 
+  itemToUpdate.selectedQuantity = newQuantity.toString();
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
 
+// Remove the product from the local storage
 export const deleteCartItem = (productID, selectedColor) => {
   const cartItems = getCartItems();
   const indexOfTtemToDelete = getSavedItemIndex(productID, selectedColor);
@@ -53,17 +57,18 @@ export const deleteCartItem = (productID, selectedColor) => {
   );
 };
 
+// Modify the options of a specified product
 export const setCartItem = (productID, selectedColor, selectedQuantity) => {
   const currentCartItems = getCartItems();
   const savedItemIndex = getSavedItemIndex(productID, selectedColor);
   const itemToUpdate = currentCartItems[savedItemIndex];
 
-  if (selectedQuantity > 100)
+  if (Number(selectedQuantity) > 100)
     return alert(
       "Vous ne pouvez ajouter davantage de ce produit à votre panier - Quantité maximum autorisée : 100 exemplaires"
     );
 
-  if (selectedQuantity < 1)
+  if (Number(selectedQuantity) < 1)
     return alert(
       "Vous ne pouvez ajouter davantage de ce produit à votre panier - Quantité maximum autorisée : 100 exemplaires"
     );
@@ -79,6 +84,7 @@ const getSavedItemIndex = (id, selectedColor) => {
   );
 };
 
+// Decides wither to create or update the product
 export const saveToLocalStorage = (
   productID,
   selectedColor,
@@ -90,7 +96,7 @@ export const saveToLocalStorage = (
   } else {
     createCartItem(productID, selectedColor, selectedQuantity);
   }
-  console.log(getCartItems());
 };
 
+// Remove all product from the localStorage
 export const cleanLocalStorage = () => localStorage.clear();

@@ -17,7 +17,6 @@ import { allInputsAreValid } from "./inputValidators.mjs";
  * @param {Event} e
  */
 export const orderButtonHandler = async (e) => {
-  console.log(typeof e);
   e.preventDefault();
 
   const products = getCartItems().map((item) => item.productID);

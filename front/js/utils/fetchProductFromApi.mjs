@@ -14,14 +14,14 @@ import { productsAPIURL } from "./constants.mjs";
 /**
  * Calls the product API to retrieve
  * @param {string} [productID]
- * @returns {Product | Product[]}
  */
 export const fetchProductFromApi = async (productID = "") => {
   return fetch(`${productsAPIURL}${productID}`)
     .then((res) => {
       if (!res.ok)
         return console.error("something went wrong when loading products");
-      return res.json();
+      const data = res.json();
+      return data;
     })
     .catch((error) => console.error(error));
 };

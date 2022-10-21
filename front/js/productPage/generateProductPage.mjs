@@ -10,6 +10,7 @@ import {
   addButtonElement,
 } from "./productPageSelectors.mjs";
 
+// Retrive the productID from the url and query the API to get product info and to build the element of the page
 export const generateProductPage = async () => {
   const currentUrl = window.location.search;
   const urlParams = new URLSearchParams(currentUrl);
@@ -24,16 +25,16 @@ export const generateProductPage = async () => {
   img.setAttribute("alt", altTxt);
   itemImgElement.appendChild(img);
 
-  titleElement.innerHTML = name;
+  titleElement.textContent = name;
 
-  priceElement.innerHTML = price;
+  priceElement.textContent = price;
 
-  descriptionElement.innerHTML = description;
+  descriptionElement.textContent = description;
 
   colors.forEach((color) => {
     const option = document.createElement("option");
     option.setAttribute("value", color);
-    option.innerHTML = color;
+    option.textContent = color;
     selectElement.appendChild(option);
   });
 

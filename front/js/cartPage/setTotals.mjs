@@ -2,6 +2,7 @@ import { fetchProductFromApi } from "../utils/fetchProductFromApi.mjs";
 import { getCartItems } from "../utils/localStorage.mjs";
 import { totalPrice, totalQuantity } from "./cartPageSelectors.mjs";
 
+// Uses cart infos from localstorage to calculate and set total quantity and total price
 export const setTotals = async () => {
   const cartItems = getCartItems();
 
@@ -17,6 +18,6 @@ export const setTotals = async () => {
     return prevTotal + itemPrice;
   }, 0);
 
-  totalQuantity.innerHTML = totalItemQuantity;
-  totalPrice.innerHTML = totalItemPrice;
+  totalQuantity.textContent = totalItemQuantity;
+  totalPrice.textContent = totalItemPrice;
 };

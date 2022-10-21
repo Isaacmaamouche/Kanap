@@ -1,3 +1,4 @@
+// Control if the input quantity is between the min and max value
 export const verifyQuantity = (inputValue) => {
   if (inputValue > 100) {
     inputValue = 100;

@@ -27,12 +27,12 @@ export const createItem = (
 
   const name = document.createElement("h3");
   name.setAttribute("class", "productName");
-  name.innerHTML = itemName;
+  name.textContent = itemName;
   article.appendChild(name);
 
   const description = document.createElement("p");
   description.setAttribute("class", "productDescription");
-  description.innerHTML = itemDescription;
+  description.textContent = itemDescription;
   article.appendChild(description);
 
   return a;

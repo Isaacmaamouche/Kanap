@@ -5,6 +5,7 @@ import { addFormValidators } from "./inputValidators.mjs";
 import { orderButtonHandler } from "./orderButtonHandler.mjs";
 import { setTotals } from "./setTotals.mjs";
 
+// Create all products lines from the cart and calculate the total
 export const generateCartPage = async () => {
   const cartItems = getCartItems();
   cartItems.forEach(({ productID, selectedColor, selectedQuantity }) =>
